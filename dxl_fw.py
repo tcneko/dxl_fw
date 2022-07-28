@@ -9,6 +9,7 @@
 
 # import
 import hashlib
+import ipaddress
 import json
 import random
 import subprocess
@@ -23,7 +24,7 @@ debug = False
 def shell(cmd, non_zero_return=False):
     if debug:
         typer.echo(cmd)
-    proc = subprocess.run([cmd], capture_output=True, shell=True)
+    proc = subprocess.run([cmd], stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
     if proc.returncode != 0 and not non_zero_return:
         msg = {"severity": 3,
                "message": f"Command \'{cmd}\' return non-zero code: {proc.returncode}"}
@@ -52,10 +53,19 @@ def init_iptables_chain(table, chain):
         shell(f"iptables -t {table} -N {chain}")
 
 
+def sterilize_ipset_member(raw_member):
+    net = ipaddress.ip_network(raw_member, strict=False)
+    if net.prefixlen == net.max_prefixlen:
+        member = str(ipaddress.ip_interface(net).ip)
+    else:
+        member = str(net)
+    return member
+
+
 def sync_ipset_member(ipset, member_list):
     stdout = shell(f"ipset list {ipset}")[1]
     old_member_set = set(stdout.decode("utf-8").split("\n")[8:-1])
-    new_member_set = set(member_list)
+    new_member_set = set(map(sterilize_ipset_member, member_list))
     add_member_set = new_member_set - old_member_set
     del_member_set = old_member_set - new_member_set
     for member in add_member_set:
