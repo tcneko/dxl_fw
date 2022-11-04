@@ -21,7 +21,9 @@ install() {
   if [[ ! -d ${ins_dir} ]]; then
     mkdir -p ${ins_dir}
   fi
-  cp -f ${cur_dir}/dxl_fw.py ${ins_dir}/dxl_fw.py
+  cp -f ${cur_dir}/dxl_fw.py \
+    ${cur_dir}/startup.sh \
+    ${ins_dir}
 
   if [[ ! -d ${cfg_dir} ]]; then
     mkdir -p ${cfg_dir}
