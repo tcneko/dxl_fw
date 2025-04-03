@@ -1,0 +1,45 @@
+{
+  "task_list": [
+    {
+      "type": "sync_ipset_member",
+      "var_list": []
+    },
+    {
+      "type": "sync_iptables_rule",
+      "var_list": [
+        {
+          "table": "filter",
+          "chain": "INPUT",
+          "rule_list": [
+            "-i lo -j ACCEPT",
+            "-m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT",
+            "-m conntrack --ctstate INVALID -j DROP"
+          ]
+        },
+        {
+          "table": "filter",
+          "chain": "OUTPUT",
+          "rule_list": [
+            "-o lo -j ACCEPT",
+            "-m conntrack --ctstate ESTABLISHED -j ACCEPT"
+          ]
+        },
+        {
+          "table": "filter",
+          "chain": "FORWARD",
+          "rule_list": []
+        },
+        {
+          "table": "nat",
+          "chain": "PREROUTING",
+          "rule_list": []
+        },
+        {
+          "table": "nat",
+          "chain": "POSTROUTING",
+          "rule_list": []
+        }
+      ]
+    }
+  ]
+}
