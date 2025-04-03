@@ -30,6 +30,8 @@ install() {
   fi
   cp -n ${cur_dir}/onetime.json \
     ${cur_dir}/runtime.json \
+    ${cur_dir}/onetime_v6.json \
+    ${cur_dir}/runtime_v6.json \
     ${cfg_dir}
 }
 

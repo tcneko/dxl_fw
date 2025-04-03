@@ -1,0 +1,16 @@
+{
+  "task_list": [
+    {
+      "type": "init_iptables_table",
+      "var_list": [{ "table": "filter" }, { "table": "nat" }]
+    },
+    {
+      "type": "init_iptables_chain",
+      "var_list": []
+    },
+    {
+      "type": "init_ipset",
+      "var_list": []
+    }
+  ]
+}
